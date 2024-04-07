@@ -55,7 +55,7 @@ router.get('/', async (req, res) => {
     } catch (err) {
       res.status(400).json(err);
     }
-  });
+  };
   
   // PUT route to update a thought by its _id
   router.put('/:id', async (req, res) => {

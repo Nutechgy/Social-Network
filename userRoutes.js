@@ -4,6 +4,7 @@ const router =('express').Router();
 const { body } = require('express-validator');
 const  {User,Thought} = require('../models/user');
 const { createUser } = require('../controllers/userController');
+const { getCache, setCache } = require('../cache');
 
 // GET all users
 router.get('/', async (req, res) => {
@@ -23,6 +24,22 @@ router.get('/:id', async (req, res) => {
   } catch (err) {
     res.status(500).json(err);
   }
+});
+
+//Get and set cache
+router.get('/', async (req, res) => {
+    try {
+        const cachedUsers = getCache('users');
+        if (cachedUsers) {
+            return res.json(cachedUsers);
+        }
+
+        const users = await User.find();
+        setCache('users', users);
+        res.json(users);
+    } catch (err) {
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
 });
 
 // POST a new user

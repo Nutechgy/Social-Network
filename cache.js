@@ -20,3 +20,13 @@ router.get('/users', checkCache, async (req, res) => {
     res.status(500).json(err);
   }
 });
+
+function setCache(key, value) {
+    cache[key] = value;
+}
+
+function getCache(key) {
+    return cache[key];
+}
+
+module.exports = { setCache, getCache };
