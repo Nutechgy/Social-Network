@@ -1,16 +1,32 @@
-const https = require('https');
-const fs = require('fs');
 const express = require('express');
+const mongoose = require('mongoose');
+const userRoutes = require('./userRoutes');
+const thoughtRoutes = require('./thoughtRoutes');
+const reactionRoutes = require('./routes/reactionRoutes'); // Import reaction routes
+
 const app = express();
+const PORT = process.env.PORT || 3000;
 
-const options = {
-  key: fs.readFileSync('path_to_private_key.pem'),
-  cert: fs.readFileSync('path_to_certificate.pem')
-};
+// Middleware
+app.use(express.json());
 
-const server = https.createServer(options, app);
-
-server.listen(443, () => {
-  console.log('Server is running on port 443');
+// Connect to MongoDB
+mongoose.connect('mongodb://localhost/social-network', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useFindAndModify: false
 });
-//You'll need to obtain an SSL certificate and configure your server to use HTTPS.
+
+mongoose.connection.on('connected', () => {
+  console.log('Connected to MongoDB');
+});
+
+// Routes
+app.use('/api/users', userRoutes);
+app.use('/api/thoughts', thoughtRoutes);
+app.use('/api/thoughts/:thoughtId/reactions', reactionRoutes); // Use reaction routes
+
+// Start the server
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
