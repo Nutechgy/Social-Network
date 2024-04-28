@@ -1,7 +1,7 @@
 // userRoutes.test.js
 
 const request = require('supertest');
-const app = require('../app'); // Assuming your Express app is defined in 'app.js'
+const app = require('../app'); 
 const { User, Thought } = require('../models');
 
 describe('API Routes', () => {
@@ -32,7 +32,7 @@ describe('API Routes', () => {
       expect(response.body).toMatchObject(newUser);
     });
 
-    // Add more tests for other user routes as needed
+    // test
   });
 
   describe('Thought Routes', () => {
